@@ -33,11 +33,16 @@ def main():
         margin-bottom: 2rem;
     }
     .metric-card {
-        background-color: #f8f9fa;
-        border-radius: 5px;
-        padding: 10px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        margin-bottom: 10px;
+        background: linear-gradient(135deg, #f8f9fa, #eef2f6); /* 부드러운 그라데이션 */
+        border-radius: 15px; /* 둥근 모서리 */
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 더 부드러운 그림자 */
+        margin-bottom: 15px;
+        text-align: center;
+        transition: transform 0.2s ease-in-out; /* 부드러운 hover 효과 */
+    }
+    .metric-card:hover {
+        transform: translateY(-3px); /* 마우스를 올리면 약간 올라가는 효과 */
     }
     .metric-title {
         font-size: 1.1rem;
