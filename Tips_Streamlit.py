@@ -119,83 +119,139 @@ def main():
     
     # 주요 지표 섹션 - 전체 데이터
     st.subheader("전체 데이터")
-    col1, col2, col3 = st.columns(3)
     
-    with col1:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">운영사 수</div>
-            <div class="metric-value">{total_operators}개사</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">일반형 팁스</div>
-            <div class="metric-value">{total_tips}개사</div>
-        </div>
-        """, unsafe_allow_html=True)
+    # 전체 데이터 좌우 분할
+    left_col, right_col = st.columns(2)
     
-    with col2:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">스케일업 팁스(투자)</div>
-            <div class="metric-value">{total_scaleup_invest}개사</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">스케일업 팁스(R&D)</div>
-            <div class="metric-value">{total_scaleup_rd}개사</div>
-        </div>
-        """, unsafe_allow_html=True)
+    # 좌측 - 숫자 데이터
+    with left_col:
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-title">운영사 수</div>
+                <div class="metric-value">{total_operators}개사</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">일반형 팁스</div>
+                <div class="metric-value">{total_tips}개사</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-title">스케일업 팁스(투자)</div>
+                <div class="metric-value">{total_scaleup_invest}개사</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">스케일업 팁스(R&D)</div>
+                <div class="metric-value">{total_scaleup_rd}개사</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-title">프리팁스</div>
+                <div class="metric-value">{total_pretips}개사</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">립스</div>
+                <div class="metric-value">{total_lips}개사</div>
+            </div>
+            """, unsafe_allow_html=True)
     
-    with col3:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">프리팁스</div>
-            <div class="metric-value">{total_pretips}개사</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">립스</div>
-            <div class="metric-value">{total_lips}개사</div>
-        </div>
-        """, unsafe_allow_html=True)
+    # 우측 - 원그래프
+    with right_col:
+        # 원그래프 데이터 준비
+        pie_labels = ["일반형 팁스", "스케일업 팁스(투자)", "스케일업 팁스(R&D)", "프리팁스", "립스"]
+        pie_values = [total_tips, total_scaleup_invest, total_scaleup_rd, total_pretips, total_lips]
+        
+        # 원그래프 생성
+        fig = px.pie(
+            names=pie_labels,
+            values=pie_values,
+            title="전체 운영사 프로그램 비중",
+            color_discrete_sequence=px.colors.qualitative.Set3,
+            hole=0.4
+        )
+        fig.update_traces(textposition='inside', textinfo='percent+label')
+        fig.update_layout(
+            legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5),
+            margin=dict(t=50, b=50, l=20, r=20)
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
     
     # 주요 지표 섹션 - 협회 회원사 데이터 (비율 포함)
     st.subheader("협회 회원사 데이터")
-    col1, col2, col3 = st.columns(3)
     
-    with col1:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">운영 회원사 수</div>
-            <div class="metric-value">{assoc_operators}개사 <span class="metric-ratio">({association_ratio['운영사 수'][0]}%)</span></div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">일반형 팁스</div>
-            <div class="metric-value">{assoc_tips}개사 <span class="metric-ratio">({association_ratio['일반형 팁스'][0]}%)</span></div>
-        </div>
-        """, unsafe_allow_html=True)
+    # 협회 회원사 데이터 좌우 분할
+    left_col, right_col = st.columns(2)
     
-    with col2:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">스케일업 팁스(투자)</div>
-            <div class="metric-value">{assoc_scaleup_invest}개사 <span class="metric-ratio">({association_ratio['스케일업 팁스(투자)'][0]}%)</span></div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">스케일업 팁스(R&D)</div>
-            <div class="metric-value">{assoc_scaleup_rd}개사 <span class="metric-ratio">({association_ratio['스케일업 팁스(R&D)'][0]}%)</span></div>
-        </div>
-        """, unsafe_allow_html=True)
+    # 좌측 - 숫자 데이터
+    with left_col:
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-title">운영 회원사 수</div>
+                <div class="metric-value">{assoc_operators}개사 <span class="metric-ratio">({association_ratio['운영사 수'][0]}%)</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">일반형 팁스</div>
+                <div class="metric-value">{assoc_tips}개사 <span class="metric-ratio">({association_ratio['일반형 팁스'][0]}%)</span></div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-title">스케일업 팁스(투자)</div>
+                <div class="metric-value">{assoc_scaleup_invest}개사 <span class="metric-ratio">({association_ratio['스케일업 팁스(투자)'][0]}%)</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">스케일업 팁스(R&D)</div>
+                <div class="metric-value">{assoc_scaleup_rd}개사 <span class="metric-ratio">({association_ratio['스케일업 팁스(R&D)'][0]}%)</span></div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-title">프리팁스</div>
+                <div class="metric-value">{assoc_pretips}개사 <span class="metric-ratio">({association_ratio['프리팁스'][0]}%)</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">립스</div>
+                <div class="metric-value">{assoc_lips}개사 <span class="metric-ratio">({association_ratio['립스'][0]}%)</span></div>
+            </div>
+            """, unsafe_allow_html=True)
     
-    with col3:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">프리팁스</div>
-            <div class="metric-value">{assoc_pretips}개사 <span class="metric-ratio">({association_ratio['프리팁스'][0]}%)</span></div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">립스</div>
-            <div class="metric-value">{assoc_lips}개사 <span class="metric-ratio">({association_ratio['립스'][0]}%)</span></div>
-        </div>
-        """, unsafe_allow_html=True)
+    # 우측 - 원그래프
+    with right_col:
+        # 원그래프 데이터 준비
+        assoc_pie_labels = ["일반형 팁스", "스케일업 팁스(투자)", "스케일업 팁스(R&D)", "프리팁스", "립스"]
+        assoc_pie_values = [assoc_tips, assoc_scaleup_invest, assoc_scaleup_rd, assoc_pretips, assoc_lips]
+        
+        # 원그래프 생성
+        assoc_fig = px.pie(
+            names=assoc_pie_labels,
+            values=assoc_pie_values,
+            title="협회 회원사 프로그램 비중",
+            color_discrete_sequence=px.colors.qualitative.Pastel,
+            hole=0.4
+        )
+        assoc_fig.update_traces(textposition='inside', textinfo='percent+label')
+        assoc_fig.update_layout(
+            legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5),
+            margin=dict(t=50, b=50, l=20, r=20)
+        )
+        
+        st.plotly_chart(assoc_fig, use_container_width=True)
     
     # 시각화 섹션
     st.markdown("## 📈 데이터 시각화")
@@ -293,6 +349,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# streamlit run Tips_Streamlit.py
