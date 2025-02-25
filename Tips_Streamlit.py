@@ -460,36 +460,85 @@ def show_investment_dashboard():
         </div>
         """, unsafe_allow_html=True)
 
-    # 연도별 투자 금액 변화 시각화 (선 그래프)
+    # 연도별 투자 금액 변화 시각화 (막대 그래프 + 선 그래프)
     st.subheader("📈 연도별 투자 금액 변화")
 
     # 데이터 준비
     investment_trend = df[["회사명", "2020 투자 금액(억)", "2021 투자 금액(억)", 
                             "2022 투자 금액(억)", "2023 투자 금액(억)", "2024 투자 금액(억)"]]
     
+    companies_trend = df[["회사명", "2020 투자 기업 수", "2021 투자 기업 수", 
+                           "2022 투자 기업 수", "2023 투자 기업 수", "2024 투자 기업 수"]]
+    
     investment_trend = investment_trend.melt(id_vars=["회사명"], 
                                              var_name="연도", 
                                              value_name="투자 금액(억)")
+    
+    companies_trend = companies_trend.melt(id_vars=["회사명"], 
+                                           var_name="연도", 
+                                           value_name="투자 기업 수")
+    
     investment_trend["연도"] = investment_trend["연도"].str.extract(r'(\d+)').astype(int)
+    companies_trend["연도"] = companies_trend["연도"].str.extract(r'(\d+)').astype(int)
 
     # 회사 선택 위젯 추가
     companies = sorted(df["회사명"].unique())
     selected_company = st.selectbox("회사를 선택하세요:", companies)
     
     # 선택된 회사의 데이터만 필터링
-    filtered_data = investment_trend[investment_trend["회사명"] == selected_company]
+    filtered_investment = investment_trend[investment_trend["회사명"] == selected_company]
+    filtered_companies = companies_trend[companies_trend["회사명"] == selected_company]
     
-    # 선택된 회사의 연도별 투자 금액 변화 그래프
-    fig = px.line(filtered_data, x="연도", y="투자 금액(억)", 
-                  title=f"{selected_company}의 연도별 투자 금액 변화", 
-                  markers=True)
+    # 선택된 회사의 연도별 투자 금액 및 기업 수 변화 그래프 (막대 + 선)
+    fig = go.Figure()
     
+    # 투자 금액 막대 그래프 추가
+    fig.add_trace(go.Bar(
+        x=filtered_investment["연도"],
+        y=filtered_investment["투자 금액(억)"],
+        name="투자 금액(억원)",
+        marker_color='#4CAF50'
+    ))
+    
+    # 투자 기업 수 선 그래프 추가 (보조 y축)
+    fig.add_trace(go.Scatter(
+        x=filtered_companies["연도"],
+        y=filtered_companies["투자 기업 수"],
+        name="투자 기업 수",
+        marker=dict(size=10),
+        line=dict(width=3, color='#FF6B6B'),
+        yaxis="y2"
+    ))
+    
+    # 레이아웃 설정
     fig.update_layout(
-        xaxis_title="연도",
-        yaxis_title="투자 금액(억원)",
-        xaxis=dict(tickmode='linear'),
-        yaxis=dict(gridcolor='lightgray'),
-        plot_bgcolor='white'
+        title=f"{selected_company}의 연도별 투자 금액 및 기업 수 변화",
+        xaxis=dict(
+            title="연도",
+            tickmode='linear'
+        ),
+        yaxis=dict(
+            title="투자 금액(억원)",
+            titlefont=dict(color='#4CAF50'),
+            tickfont=dict(color='#4CAF50')
+        ),
+        yaxis2=dict(
+            title="투자 기업 수",
+            titlefont=dict(color='#FF6B6B'),
+            tickfont=dict(color='#FF6B6B'),
+            anchor="x",
+            overlaying="y",
+            side="right"
+        ),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="center",
+            x=0.5
+        ),
+        plot_bgcolor='white',
+        hovermode="x unified"
     )
     
     st.plotly_chart(fig, use_container_width=True)
@@ -516,6 +565,7 @@ def show_investment_dashboard():
 
 if __name__ == "__main__":
     main()
+
 
 
 
