@@ -78,11 +78,11 @@ def main():
     
     # 페이지 선택 사이드바
     st.sidebar.markdown("## 페이지 선택")
-    page = st.sidebar.radio("이동할 페이지를 선택하세요:", ["투자 데이터 분석", "TIPS 운영사 데이터 대시보드"])
+    page = st.sidebar.radio("이동할 페이지를 선택하세요:", ["액셀러레이터 투자 데이터", "TIPS 운영사 데이터"])
     
-    if page == "TIPS 운영사 데이터 대시보드":
+    if page == "TIPS 운영사 데이터":
         show_main_dashboard()
-    elif page == "투자 데이터 분석":
+    elif page == "액셀러레이터 투자 데이터":
         show_investment_dashboard()
 
 def show_main_dashboard():
@@ -378,8 +378,8 @@ def show_main_dashboard():
             }), use_container_width=True)
 
 def show_investment_dashboard():
-    st.markdown("## 💰 투자 데이터 분석")
-    st.write("이 페이지에서는 투자 데이터를 분석하고 시각화합니다.")
+    st.markdown("## 💰 액셀러레이터 투자 데이터 대시보드")
+    st.write("이 페이지에서는 액셀러레이터 투자 데이터를 분석하고 시각화합니다.")
 
     # 데이터 로드
     @st.cache_data
@@ -459,6 +459,68 @@ def show_investment_dashboard():
             <div class="metric-ratio">투자 기업 수: {companies_2020:,}개사</div>
         </div>
         """, unsafe_allow_html=True)
+    
+    # 전체 연도별 투자 금액 및 기업 수 변화 시각화
+    st.subheader("📈 전체 연도별 투자 흐름")
+    
+    # 전체 연도별 데이터 준비
+    years = [2020, 2021, 2022, 2023, 2024]
+    investment_by_year = [investment_2020, investment_2021, investment_2022, investment_2023, investment_2024]
+    companies_by_year = [companies_2020, companies_2021, companies_2022, companies_2023, companies_2024]
+    
+    # 전체 연도별 투자 금액 및 기업 수 변화 그래프 (막대 + 선)
+    fig = go.Figure()
+    
+    # 투자 금액 막대 그래프 추가
+    fig.add_trace(go.Bar(
+        x=years,
+        y=investment_by_year,
+        name="투자 금액(억원)",
+        marker_color='#4CAF50'
+    ))
+    
+    # 투자 기업 수 선 그래프 추가 (보조 y축)
+    fig.add_trace(go.Scatter(
+        x=years,
+        y=companies_by_year,
+        name="투자 기업 수",
+        marker=dict(size=10),
+        line=dict(width=3, color='#FF6B6B'),
+        yaxis="y2"
+    ))
+    
+    # 레이아웃 설정
+    fig.update_layout(
+        title="전체 연도별 투자 금액 및 투자 기업 수 변화",
+        xaxis=dict(
+            title="연도",
+            tickmode='linear'
+        ),
+        yaxis=dict(
+            title="투자 금액(억원)",
+            title_font=dict(color='#4CAF50'),
+            tickfont=dict(color='#4CAF50')
+        ),
+        yaxis2=dict(
+            title="투자 기업 수",
+            title_font=dict(color='#FF6B6B'),
+            tickfont=dict(color='#FF6B6B'),
+            anchor="x",
+            overlaying="y",
+            side="right"
+        ),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="center",
+            x=0.5
+        ),
+        plot_bgcolor='white',
+        hovermode="x unified"
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
 
     # 연도별 투자 금액 변화 시각화 (막대 그래프 + 선 그래프)
     st.subheader("📈 연도별 투자 금액 변화")
@@ -565,8 +627,3 @@ def show_investment_dashboard():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
