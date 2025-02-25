@@ -56,6 +56,16 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
+    # 페이지 선택 사이드바
+    st.sidebar.markdown("## 페이지 선택")
+    page = st.sidebar.radio("이동할 페이지를 선택하세요:", ["메인 대시보드", "테스트 페이지"])
+    
+    if page == "메인 대시보드":
+        show_main_dashboard()
+    elif page == "테스트 페이지":
+        show_test_page()
+
+def show_main_dashboard():
     st.markdown('<div class="main-header">TIPS 운영사 데이터 대시보드</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">전체 운영사 및 초기투자액셀러레이터협회 회원사 데이터를 비교 분석합니다.</div>', unsafe_allow_html=True)
 
@@ -346,6 +356,70 @@ def main():
                 'color': 'black',
                 'text-align': 'center'
             }), use_container_width=True)
+
+def show_test_page():
+    st.markdown('<div class="main-header">테스트 페이지</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">이 페이지는 테스트 목적으로 만들어졌습니다.</div>', unsafe_allow_html=True)
+    
+    st.markdown("## 🧪 테스트 섹션")
+    
+    # 테스트 컨텐츠 예시
+    st.info("이 페이지는 개발 중입니다. 추가 기능이 곧 구현될 예정입니다.")
+    
+    # 간단한 인터랙티브 요소 추가
+    test_option = st.selectbox(
+        "테스트 옵션을 선택하세요:",
+        ["옵션 1", "옵션 2", "옵션 3"]
+    )
+    
+    st.write(f"선택된 옵션: {test_option}")
+    
+    # 슬라이더 예시
+    test_value = st.slider("값을 조정하세요:", 0, 100, 50)
+    st.write(f"현재 값: {test_value}")
+    
+    # 두 개의 열로 나누기
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("왼쪽 열")
+        st.write("여기에 왼쪽 열 내용이 들어갑니다.")
+        if st.button("왼쪽 버튼"):
+            st.success("왼쪽 버튼이 클릭되었습니다!")
+    
+    with col2:
+        st.subheader("오른쪽 열")
+        st.write("여기에 오른쪽 열 내용이 들어갑니다.")
+        if st.button("오른쪽 버튼"):
+            st.success("오른쪽 버튼이 클릭되었습니다!")
+    
+    # 차트 예시
+    st.subheader("샘플 차트")
+    chart_data = pd.DataFrame({
+        '날짜': pd.date_range(start='2023-01-01', periods=10),
+        '값': [10, 20, 15, 30, 25, 40, 35, 50, 45, 60]
+    })
+    
+    fig = px.line(
+        chart_data, 
+        x='날짜', 
+        y='값',
+        title='샘플 라인 차트',
+        markers=True
+    )
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # 확장 가능한 섹션
+    with st.expander("추가 정보"):
+        st.write("이 섹션은 확장 가능한 영역입니다.")
+        st.write("여기에 추가 정보나 설명을 넣을 수 있습니다.")
+        st.code("""
+        # 샘플 코드
+        def hello_world():
+            print("안녕하세요, 세계!")
+        
+        hello_world()
+        """)
 
 if __name__ == "__main__":
     main()
