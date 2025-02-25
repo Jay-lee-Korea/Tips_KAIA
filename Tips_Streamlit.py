@@ -4,6 +4,7 @@ import koreanize_matplotlib
 import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
+import altair as alt
 # streamlit_card 모듈이 없어서 제거했습니다
 
 # 데이터 파일 경로
@@ -199,39 +200,71 @@ def main():
     # 시각화 섹션
     st.markdown("## 📈 데이터 시각화")
     
-    # 차트 데이터 준비
-    chart_cols = list(total_data.keys())[1:]  # '운영사 수' 제외
+    # 차트 데이터 준비 - 순서 지정
+    program_order = ["일반형 팁스", "스케일업 팁스(투자)", "스케일업 팁스(R&D)", "프리팁스", "립스"]
     chart_data = {
         '구분': [],
         '프로그램': [],
         '운영사 수': []
     }
     
-    for col in chart_cols:
+    for program in program_order:
         chart_data['구분'].extend(['전체', '협회 회원사'])
-        chart_data['프로그램'].extend([col, col])
-        chart_data['운영사 수'].extend([total_data[col][0], association_data[col][0]])
+        chart_data['프로그램'].extend([program, program])
+        chart_data['운영사 수'].extend([total_data[program][0], association_data[program][0]])
     
     chart_df = pd.DataFrame(chart_data)
     
-    # 프로그램별 운영사 현황 차트만 표시
+    # 프로그램 순서 지정을 위한 카테고리 타입 설정
+    chart_df['프로그램'] = pd.Categorical(
+        chart_df['프로그램'], 
+        categories=program_order, 
+        ordered=True
+    )
+    
+    # Altair를 사용한 프로그램별 운영사 현황 차트
     st.subheader("프로그램별 운영사 현황")
-    fig = px.bar(
-        chart_df, 
-        x='프로그램', 
-        y='운영사 수', 
-        color='구분',
-        barmode='group',
-        color_discrete_map={'전체': '#FF9E44', '협회 회원사': '#4CAF50'},
+    
+    # Altair 차트 생성
+    chart = alt.Chart(chart_df).mark_bar().encode(
+        x=alt.X('프로그램:N', title='프로그램', sort=None),  # sort=None으로 설정하여 카테고리 순서 유지
+        y=alt.Y('운영사 수:Q', title='운영사 수'),
+        color=alt.Color('구분:N', scale=alt.Scale(
+            domain=['전체', '협회 회원사'],
+            range=['#FF9E44', '#4CAF50']
+        )),
+        column='구분:N'
+    ).properties(
+        width=300,
+        height=300
+    ).configure_axis(
+        grid=False
+    ).configure_view(
+        strokeWidth=0
+    )
+    
+    # 그룹화된 막대 차트 (grouped bar chart)
+    grouped_chart = alt.Chart(chart_df).mark_bar().encode(
+        x=alt.X('프로그램:N', title='프로그램', sort=None),  # sort=None으로 설정하여 카테고리 순서 유지
+        y=alt.Y('운영사 수:Q', title='운영사 수'),
+        color=alt.Color('구분:N', scale=alt.Scale(
+            domain=['전체', '협회 회원사'],
+            range=['#FF9E44', '#4CAF50']
+        )),
+        xOffset='구분:N'  # 이것이 그룹화를 만듭니다
+    ).properties(
+        width=600,
         height=400
+    ).configure_axis(
+        labelFontSize=12,
+        titleFontSize=14
+    ).configure_legend(
+        orient='top',
+        titleFontSize=14,
+        labelFontSize=12
     )
-    fig.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
-        xaxis=dict(showgrid=False),
-        yaxis=dict(showgrid=True, gridcolor='rgba(200,200,200,0.2)'),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-    )
-    st.plotly_chart(fig, use_container_width=True)
+    
+    st.altair_chart(grouped_chart, use_container_width=True)
     
     # 상세 데이터 테이블 (접을 수 있는 섹션)
     with st.expander("📋 상세 데이터 테이블"):
