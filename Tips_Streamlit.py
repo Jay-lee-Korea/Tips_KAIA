@@ -54,6 +54,25 @@ def main():
         font-size: 0.9rem;
         color: #4B5563;
     }
+    .highlight-card {
+        background-color: #e6f7ff;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        margin-bottom: 20px;
+        border-left: 5px solid #1890ff;
+    }
+    .highlight-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #0050b3;
+        margin-bottom: 8px;
+    }
+    .highlight-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #1890ff;
+    }
     </style>
     """, unsafe_allow_html=True)
     
@@ -368,6 +387,78 @@ def show_investment_dashboard():
         return pd.read_csv(INVESTMENT_DATA_PATH)
 
     df = load_data()
+    
+    # 투자 데이터 요약 계산
+    total_investment = df["전체 투자 금액(억)"].sum()  # L열 합계
+    total_companies = df["전체 투자 기업 수"].sum()  # M열 합계
+    
+    investment_2020 = df["2020 투자 금액(억)"].sum()  # J열 합계
+    companies_2020 = df["2020 투자 기업 수"].sum()  # K열 합계
+    
+    investment_2021 = df["2021 투자 금액(억)"].sum()  # H열 합계
+    companies_2021 = df["2021 투자 기업 수"].sum()  # I열 합계
+    
+    investment_2022 = df["2022 투자 금액(억)"].sum()  # F열 합계
+    companies_2022 = df["2022 투자 기업 수"].sum()  # G열 합계
+    
+    investment_2023 = df["2023 투자 금액(억)"].sum()  # D열 합계
+    companies_2023 = df["2023 투자 기업 수"].sum()  # E열 합계
+    
+    investment_2024 = df["2024 투자 금액(억)"].sum()  # B열 합계
+    companies_2024 = df["2024 투자 기업 수"].sum()  # C열 합계
+    
+    # 전체 투자 데이터 하이라이트 카드
+    st.markdown("### 📊 투자 데이터 요약")
+    
+    # 전체 투자 데이터 하이라이트 (강조 표시)
+    st.markdown(f"""
+    <div class="highlight-card">
+        <div class="highlight-title">전체 투자 금액</div>
+        <div class="highlight-value">{total_investment:,.0f}억원</div>
+        <div class="metric-title">전체 투자 기업 수</div>
+        <div class="metric-value">{total_companies:,}개사</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # 연도별 투자 데이터 카드
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-title">2024년 투자 금액</div>
+            <div class="metric-value">{investment_2024:,.0f}억원</div>
+            <div class="metric-ratio">투자 기업 수: {companies_2024:,}개사</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">2023년 투자 금액</div>
+            <div class="metric-value">{investment_2023:,.0f}억원</div>
+            <div class="metric-ratio">투자 기업 수: {companies_2023:,}개사</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-title">2022년 투자 금액</div>
+            <div class="metric-value">{investment_2022:,.0f}억원</div>
+            <div class="metric-ratio">투자 기업 수: {companies_2022:,}개사</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">2021년 투자 금액</div>
+            <div class="metric-value">{investment_2021:,.0f}억원</div>
+            <div class="metric-ratio">투자 기업 수: {companies_2021:,}개사</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-title">2020년 투자 금액</div>
+            <div class="metric-value">{investment_2020:,.0f}억원</div>
+            <div class="metric-ratio">투자 기업 수: {companies_2020:,}개사</div>
+        </div>
+        """, unsafe_allow_html=True)
 
     # 연도별 투자 금액 변화 시각화 (선 그래프)
     st.subheader("📈 연도별 투자 금액 변화")
@@ -406,4 +497,5 @@ def show_investment_dashboard():
 
 if __name__ == "__main__":
     main()
+
 
