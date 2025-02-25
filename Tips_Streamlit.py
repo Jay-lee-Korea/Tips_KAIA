@@ -510,7 +510,7 @@ def show_investment_dashboard():
         yaxis="y2"
     ))
     
-    # 레이아웃 설정
+    # 레이아웃 설정 - titlefont 대신 title_font 사용
     fig.update_layout(
         title=f"{selected_company}의 연도별 투자 금액 및 기업 수 변화",
         xaxis=dict(
@@ -519,12 +519,12 @@ def show_investment_dashboard():
         ),
         yaxis=dict(
             title="투자 금액(억원)",
-            titlefont=dict(color='#4CAF50'),
+            title_font=dict(color='#4CAF50'),
             tickfont=dict(color='#4CAF50')
         ),
         yaxis2=dict(
             title="투자 기업 수",
-            titlefont=dict(color='#FF6B6B'),
+            title_font=dict(color='#FF6B6B'),
             tickfont=dict(color='#FF6B6B'),
             anchor="x",
             overlaying="y",
@@ -565,6 +565,7 @@ def show_investment_dashboard():
 
 if __name__ == "__main__":
     main()
+
 
 
 
