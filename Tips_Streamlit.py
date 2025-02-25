@@ -415,15 +415,26 @@ def show_investment_dashboard():
     # 전체 투자 데이터 하이라이트 카드
     st.markdown("### 📊 투자 데이터 요약")
     
-    # 전체 투자 데이터 하이라이트 (강조 표시)
-    st.markdown(f"""
-    <div class="highlight-card">
-        <div class="highlight-title">전체 투자 금액</div>
-        <div class="highlight-value">{total_investment:,.0f}억원</div>
-        <div class="metric-title">전체 투자 기업 수</div>
-        <div class="metric-value">{total_companies:,}개사</div>
-    </div>
-    """, unsafe_allow_html=True)
+    # 전체 투자 데이터 하이라이트 (강조 표시) - 좌우 분할
+    left_col, right_col = st.columns(2)
+    
+    # 좌측 - 전체 투자 금액 표시
+    with left_col:
+        st.markdown(f"""
+        <div class="highlight-card">
+            <div class="highlight-title">💰 전체 투자 금액</div>
+            <div class="highlight-value">{total_investment:,.0f}억원</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # 우측 - 전체 투자 기업 수 표시
+    with right_col:
+        st.markdown(f"""
+        <div class="highlight-card">
+            <div class="highlight-title">🏢 전체 투자 기업 수</div>
+            <div class="highlight-value">{total_companies:,}개사</div>
+        </div>
+        """, unsafe_allow_html=True)
     
     # 연도별 투자 데이터 카드
     col1, col2, col3 = st.columns(3)
