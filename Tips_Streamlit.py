@@ -60,12 +60,12 @@ def main():
         color: #4B5563;
     }
     .highlight-card {
-        background-color: #e6f7ff;
-        border-radius: 8px;
-        padding: 15px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb); /* 부드러운 블루 그라데이션 */
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
         margin-bottom: 20px;
-        border-left: 5px solid #1890ff;
+        border-left: 6px solid #2196f3; /* 왼쪽 테두리 강조 */
     }
     .highlight-title {
         font-size: 1.3rem;
@@ -74,9 +74,9 @@ def main():
         margin-bottom: 8px;
     }
     .highlight-value {
-        font-size: 2rem;
+        font-size: 2.2rem;
         font-weight: bold;
-        color: #1890ff;
+        color: #1E88E5;
     }
     </style>
     """, unsafe_allow_html=True)
