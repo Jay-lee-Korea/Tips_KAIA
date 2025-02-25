@@ -4,3 +4,4 @@ matplotlib
 koreanize-matplotlib
 setuptools
 plotly
+altair
