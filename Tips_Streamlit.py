@@ -56,7 +56,7 @@ def main():
     """, unsafe_allow_html=True)
     
     st.markdown('<div class="main-header">TIPS 운영사 데이터 대시보드</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">전체 운영사 및 협회 회원사 데이터를 비교 분석합니다.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">전체 운영사 및 초기투자액셀러레이터협회 회원사 데이터를 비교 분석합니다.</div>', unsafe_allow_html=True)
 
     # 데이터 로드
     @st.cache_data
