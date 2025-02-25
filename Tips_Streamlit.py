@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 # streamlit_card 모듈이 없어서 제거했습니다
 
 # 데이터 파일 경로
-DATA_PATH = "data/TIPS 운영사 정리.csv"
+DATA_PATH = "TIPS 운영사 정리.csv"
 
 # Streamlit 앱 구성
 def main():
