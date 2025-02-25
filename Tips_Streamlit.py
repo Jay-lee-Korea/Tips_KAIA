@@ -463,6 +463,7 @@ def show_investment_dashboard():
     # 연도별 투자 금액 변화 시각화 (선 그래프)
     st.subheader("📈 연도별 투자 금액 변화")
 
+    # 데이터 준비
     investment_trend = df[["회사명", "2020 투자 금액(억)", "2021 투자 금액(억)", 
                             "2022 투자 금액(억)", "2023 투자 금액(억)", "2024 투자 금액(억)"]]
     
@@ -471,8 +472,26 @@ def show_investment_dashboard():
                                              value_name="투자 금액(억)")
     investment_trend["연도"] = investment_trend["연도"].str.extract(r'(\d+)').astype(int)
 
-    fig = px.line(investment_trend, x="연도", y="투자 금액(억)", color="회사명",
-                  title="연도별 투자 금액 변화", markers=True)
+    # 회사 선택 위젯 추가
+    companies = sorted(df["회사명"].unique())
+    selected_company = st.selectbox("회사를 선택하세요:", companies)
+    
+    # 선택된 회사의 데이터만 필터링
+    filtered_data = investment_trend[investment_trend["회사명"] == selected_company]
+    
+    # 선택된 회사의 연도별 투자 금액 변화 그래프
+    fig = px.line(filtered_data, x="연도", y="투자 금액(억)", 
+                  title=f"{selected_company}의 연도별 투자 금액 변화", 
+                  markers=True)
+    
+    fig.update_layout(
+        xaxis_title="연도",
+        yaxis_title="투자 금액(억원)",
+        xaxis=dict(tickmode='linear'),
+        yaxis=dict(gridcolor='lightgray'),
+        plot_bgcolor='white'
+    )
+    
     st.plotly_chart(fig, use_container_width=True)
 
     # 운용사별 전체 투자 금액 비교 (막대 그래프)
@@ -497,5 +516,6 @@ def show_investment_dashboard():
 
 if __name__ == "__main__":
     main()
+
 
 
