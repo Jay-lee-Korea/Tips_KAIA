@@ -156,7 +156,7 @@ def main():
         </div>
         """, unsafe_allow_html=True)
     
-    # 주요 지표 섹션 - 협회 회원사 데이터
+    # 주요 지표 섹션 - 협회 회원사 데이터 (비율 포함)
     st.subheader("협회 회원사 데이터")
     col1, col2, col3 = st.columns(3)
     
@@ -164,11 +164,11 @@ def main():
         st.markdown(f"""
         <div class="metric-card">
             <div class="metric-title">운영 회원사 수</div>
-            <div class="metric-value">{assoc_operators}개사</div>
+            <div class="metric-value">{assoc_operators}개사 <span class="metric-ratio">({association_ratio['운영사 수'][0]}%)</span></div>
         </div>
         <div class="metric-card">
             <div class="metric-title">일반형 팁스</div>
-            <div class="metric-value">{assoc_tips}개사</div>
+            <div class="metric-value">{assoc_tips}개사 <span class="metric-ratio">({association_ratio['일반형 팁스'][0]}%)</span></div>
         </div>
         """, unsafe_allow_html=True)
     
@@ -176,11 +176,11 @@ def main():
         st.markdown(f"""
         <div class="metric-card">
             <div class="metric-title">스케일업 팁스(투자)</div>
-            <div class="metric-value">{assoc_scaleup_invest}개사</div>
+            <div class="metric-value">{assoc_scaleup_invest}개사 <span class="metric-ratio">({association_ratio['스케일업 팁스(투자)'][0]}%)</span></div>
         </div>
         <div class="metric-card">
             <div class="metric-title">스케일업 팁스(R&D)</div>
-            <div class="metric-value">{assoc_scaleup_rd}개사</div>
+            <div class="metric-value">{assoc_scaleup_rd}개사 <span class="metric-ratio">({association_ratio['스케일업 팁스(R&D)'][0]}%)</span></div>
         </div>
         """, unsafe_allow_html=True)
     
@@ -188,51 +188,11 @@ def main():
         st.markdown(f"""
         <div class="metric-card">
             <div class="metric-title">프리팁스</div>
-            <div class="metric-value">{assoc_pretips}개사</div>
+            <div class="metric-value">{assoc_pretips}개사 <span class="metric-ratio">({association_ratio['프리팁스'][0]}%)</span></div>
         </div>
         <div class="metric-card">
             <div class="metric-title">립스</div>
-            <div class="metric-value">{assoc_lips}개사</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    # 주요 지표 섹션 - 전체 대비 협회 회원사 비율
-    st.subheader("전체 대비 협회 회원사 비율")
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">운영 회원사 수</div>
-            <div class="metric-value">{association_ratio['운영사 수'][0]}%</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">일반형 팁스</div>
-            <div class="metric-value">{association_ratio['일반형 팁스'][0]}%</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">스케일업 팁스(투자)</div>
-            <div class="metric-value">{association_ratio['스케일업 팁스(투자)'][0]}%</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">스케일업 팁스(R&D)</div>
-            <div class="metric-value">{association_ratio['스케일업 팁스(R&D)'][0]}%</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">프리팁스</div>
-            <div class="metric-value">{association_ratio['프리팁스'][0]}%</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-title">립스</div>
-            <div class="metric-value">{association_ratio['립스'][0]}%</div>
+            <div class="metric-value">{assoc_lips}개사 <span class="metric-ratio">({association_ratio['립스'][0]}%)</span></div>
         </div>
         """, unsafe_allow_html=True)
     
